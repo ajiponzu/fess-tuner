@@ -20,7 +20,7 @@ parser.add_argument("--num", type=int, default=5)
 args = parser.parse_args()
 
 resp = requests.get(
-    f"{FESS_BASE_URL}/api/v1/search",
+    f"{FESS_BASE_URL}/api/v1/documents",
     params={"q": args.query, "start": 0, "num": args.num},
     timeout=10,
 )

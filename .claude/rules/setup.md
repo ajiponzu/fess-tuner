@@ -7,11 +7,19 @@
 
 ```
 FESS_BASE_URL=http://piserver:8080
-FESS_ADMIN_USER=admin
-FESS_ADMIN_PASS=（実際のパスワードを記入）
+FESS_ACCESS_TOKEN=（発行したアクセストークンを記入）
 ```
+
+## Access Token の発行手順
+
+1. ブラウザで Fess 管理画面（`FESS_BASE_URL/login/`）にログイン
+2. **System > Access Token** を開く
+3. 右上の「New」をクリックし、以下の設定で作成
+   - Name: 任意（例: `fess-tuner`）
+   - Permission: `{role}admin-api`
+4. 表示された Token 文字列を `FESS_ACCESS_TOKEN` に記入
 
 ## 注意事項
 
-- `.env` が存在しない場合、各スクリプトは `FESS_BASE_URL=http://piserver:8080`、`FESS_ADMIN_USER=admin`、`FESS_ADMIN_PASS=` をデフォルト値として使用する
-- `--user` / `--pass` 引数で実行時に上書きすることも可能
+- `FESS_ACCESS_TOKEN` が未設定の場合、`fess-crawl` は起動時にエラーで終了する
+- `FESS_BASE_URL` を省略した場合は `http://piserver:8080` がデフォルト値として使用される

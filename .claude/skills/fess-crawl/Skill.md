@@ -7,24 +7,23 @@ description: >
 
 # Overview
 
-このSkillは、Fessサーバー（http://piserver:8080/）の管理APIにログインしてクロールを開始し、
-その結果を報告することを目的としています。
+このSkillは、Fessサーバー（`FESS_BASE_URL`）の管理APIにアクセスし、
+デフォルトクローラー（`default_crawler`）を即時起動してその結果を報告することを目的としています。
 
 - インデックスを最新の状態に更新したい場合に使用します。
-- クレデンシャルは `--user`/`--pass` で指定でき、省略時はデフォルト（admin/admin）を使用します。
+- 認証には `.env` の `FESS_ACCESS_TOKEN`（静的アクセストークン）を使用します。
+- Fess 15.x では管理API の認証に `Authorization: <token>` ヘッダーを使用します（Bearer 不要）。
+- クロール実行は `PUT /api/admin/scheduler/default_crawler/start` です。
 
 # Inputs
 
 このSkillは、以下の情報を入力として想定します。
 
 - 必須入力
-  - なし（デフォルトのクレデンシャルで実行可能）
+  - なし（`.env` の設定で実行可能）
 
 - 任意入力
-  - `--user USERNAME`: 管理ユーザー名（省略時: admin）
-  - `--pass PASSWORD`: 管理パスワード（省略時: admin）
-
-使用例: `/fess-crawl --user admin --pass secret`
+  - なし
 
 # Outputs
 
@@ -40,7 +39,7 @@ description: >
   # Fess クロール実行結果
 
   - ステータス: 成功 / 失敗
-  - サーバーURL: http://piserver:8080/
+  - サーバーURL: [FESS_BASE_URL]
   - メッセージ: [詳細メッセージ]
   ```
 
@@ -48,15 +47,15 @@ description: >
 
 このSkillを実行する際は、次のステップに従ってください。
 
-1. ユーザーが指定した `--user`/`--pass` オプションを確認する（未指定の場合はデフォルト値を使用）。
-2. 以下のコマンドを実行する（`$ARGUMENTS` をユーザー提供の引数に置き換える）。
+1. `.env` に `FESS_ACCESS_TOKEN` が設定されていることを確認する。
+2. 以下のコマンドを実行する。
 
    ```
-   python .claude/skills/fess-crawl/main.py $ARGUMENTS
+   python .claude/skills/fess-crawl/main.py
    ```
 
-3. クロールが正常にトリガーされた場合、クロール開始を確認メッセージとともに報告する。
-4. ログイン失敗またはエラーが返された場合、エラーの詳細を報告し、クレデンシャルの確認とDockerコンテナの起動確認を促す。
+3. `status: 0` かつ `job_log_id` が返れば成功としてクロール開始を報告する。
+4. エラーが返された場合、内容を報告し `.env` の設定とDockerコンテナの起動確認を促す。
 
 # Guidelines
 
@@ -70,5 +69,5 @@ description: >
   - クロール開始の確認または具体的なエラー内容を必ず含めてください。
 
 - 禁止事項 / 注意事項
-  - パスワードなどの認証情報を出力に含めないでください。
+  - アクセストークンなどの認証情報を出力に含めないでください。
   - 実際のコマンド出力に存在しない情報を付け加えないでください。

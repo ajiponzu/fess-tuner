@@ -1,4 +1,3 @@
-import argparse
 import json
 import os
 import sys
@@ -14,25 +13,17 @@ if _env_path.exists():
             os.environ.setdefault(_k.strip(), _v.strip())
 
 FESS_BASE_URL = os.environ.get("FESS_BASE_URL", "http://piserver:8080")
+ACCESS_TOKEN = os.environ.get("FESS_ACCESS_TOKEN", "")
 
-parser = argparse.ArgumentParser()
-parser.add_argument("--user", default=os.environ.get("FESS_ADMIN_USER", "admin"))
-parser.add_argument("--pass", dest="password", default=os.environ.get("FESS_ADMIN_PASS", ""))
-args = parser.parse_args()
-
-login = requests.post(
-    f"{FESS_BASE_URL}/api/admin/user/login",
-    data={"username": args.user, "password": args.password},
-    timeout=10,
-)
-if not login.ok:
-    print(f"Login failed: {login.status_code}", file=sys.stderr)
+if not ACCESS_TOKEN:
+    print("Error: FESS_ACCESS_TOKEN is not set in .env", file=sys.stderr)
     sys.exit(1)
-token = login.json().get("token")
 
-resp = requests.post(
-    f"{FESS_BASE_URL}/api/admin/crawl/run",
-    headers={"Authorization": f"Bearer {token}"},
+HEADERS = {"Authorization": ACCESS_TOKEN}
+
+resp = requests.put(
+    f"{FESS_BASE_URL}/api/admin/scheduler/default_crawler/start",
+    headers=HEADERS,
     timeout=10,
 )
 print(json.dumps({"status": resp.status_code, "body": resp.json()}, indent=2, ensure_ascii=False))
