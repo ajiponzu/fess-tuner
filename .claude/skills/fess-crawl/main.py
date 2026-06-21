@@ -1,13 +1,23 @@
 import argparse
 import json
+import os
 import sys
+from pathlib import Path
+
 import requests
 
-FESS_BASE_URL = "http://piserver:8080"
+_env_path = Path(__file__).parents[3] / ".env"
+if _env_path.exists():
+    for _line in _env_path.read_text(encoding="utf-8").splitlines():
+        if "=" in _line and not _line.startswith("#"):
+            _k, _v = _line.split("=", 1)
+            os.environ.setdefault(_k.strip(), _v.strip())
+
+FESS_BASE_URL = os.environ.get("FESS_BASE_URL", "http://piserver:8080")
 
 parser = argparse.ArgumentParser()
-parser.add_argument("--user", default="admin")
-parser.add_argument("--pass", dest="password", default="admin")
+parser.add_argument("--user", default=os.environ.get("FESS_ADMIN_USER", "admin"))
+parser.add_argument("--pass", dest="password", default=os.environ.get("FESS_ADMIN_PASS", ""))
 args = parser.parse_args()
 
 login = requests.post(
