@@ -51,7 +51,7 @@ description: >
 1. 以下のコマンドを実行してヘルスチェックを行う。
 
    ```
-   python .Codex/skills/fess-check/main.py
+   python .agents/skills/fess-check/main.py
    ```
 
 2. コマンドの出力を確認する。

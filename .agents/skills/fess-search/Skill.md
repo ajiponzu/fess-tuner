@@ -12,6 +12,8 @@ description: >
 
 - インデックスされたドキュメントの内容確認や情報検索に使用します。
 - 検索件数の指定（`--num`）によって取得件数を調整できます。
+- ラベルで絞り込む場合は `fields.label=<label_value>` を使用します。
+- ラベル分布を確認する場合は `facet.field=label` を使用します。
 - エンドポイント: `GET /api/v1/documents`（認証不要・公開API）
 - `/api/v1/search` は存在しないため使用しないこと
 
@@ -57,7 +59,7 @@ description: >
 2. 以下のコマンドを実行する（`$ARGUMENTS` をユーザー提供の引数に置き換える）。
 
    ```
-   python .Codex/skills/fess-search/main.py $ARGUMENTS
+   python .agents/skills/fess-search/main.py $ARGUMENTS
    ```
 
 3. レスポンスの `record_count` から総ヒット件数を抽出して表示する。

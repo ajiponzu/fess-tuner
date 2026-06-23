@@ -12,8 +12,9 @@ description: >
 
 - インデックスを最新の状態に更新したい場合に使用します。
 - 認証には `.env` の `FESS_ACCESS_TOKEN`（静的アクセストークン）を使用します。
-- Fess 15.x では管理API の認証に `Authorization: <token>` ヘッダーを使用します（Bearer 不要）。
-- クロール実行は `PUT /api/admin/scheduler/default_crawler/start` です。
+- Fess 15.6 では管理API の認証に `Authorization: Bearer <token>` ヘッダーを使用します。
+- クロール実行は `PUT /api/admin/scheduler/{id}/start` です。
+- `{id}` はジョブIDです。`default_crawler` が使えるかは環境依存のため、必要に応じて `GET /api/admin/scheduler/settings` で確認します。
 
 # Inputs
 
@@ -51,10 +52,10 @@ description: >
 2. 以下のコマンドを実行する。
 
    ```
-   python .Codex/skills/fess-crawl/main.py
+   python .agents/skills/fess-crawl/main.py
    ```
 
-3. `status: 0` かつ `job_log_id` が返れば成功としてクロール開始を報告する。
+3. レスポンスの `response.status` が `0` であれば成功としてクロール開始を報告する。
 4. エラーが返された場合、内容を報告し `.env` の設定とDockerコンテナの起動確認を促す。
 
 # Guidelines
