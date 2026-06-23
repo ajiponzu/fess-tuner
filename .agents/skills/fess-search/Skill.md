@@ -59,7 +59,7 @@ description: >
 2. 以下のコマンドを実行する（`$ARGUMENTS` をユーザー提供の引数に置き換える）。
 
    ```
-   python .agents/skills/fess-search/main.py $ARGUMENTS
+   python .agents/skills/fess-search/search_documents.py $ARGUMENTS
    ```
 
 3. レスポンスの `record_count` から総ヒット件数を抽出して表示する。

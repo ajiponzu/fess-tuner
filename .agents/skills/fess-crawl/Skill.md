@@ -52,7 +52,7 @@ description: >
 2. 以下のコマンドを実行する。
 
    ```
-   python .agents/skills/fess-crawl/main.py
+   python .agents/skills/fess-crawl/start_crawler.py
    ```
 
 3. レスポンスの `response.status` が `0` であれば成功としてクロール開始を報告する。

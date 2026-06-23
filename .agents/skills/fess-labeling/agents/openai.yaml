@@ -1,0 +1,4 @@
+interface:
+  display_name: "Fess Labeling"
+  short_description: "Fessのラベル体系を作成・更新し、ラベル再計算まで実行する"
+  default_prompt: "FessのLabelTypeとFileConfigを作成・更新し、reload_configとlabel_updaterを実行してラベル付けを検証してください。"
