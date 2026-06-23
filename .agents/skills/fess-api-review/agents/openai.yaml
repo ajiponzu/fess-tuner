@@ -1,0 +1,4 @@
+interface:
+  display_name: "Fess API Review"
+  short_description: "公式ドキュメントを参照してFess API利用記述を見直す"
+  default_prompt: "Fess 15.6 の公式APIドキュメントを参照し、AGENTS.md と関連SkillのAPI利用方法を点検・修正してください。"
