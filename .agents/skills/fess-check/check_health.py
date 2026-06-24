@@ -24,7 +24,7 @@ def load_env() -> dict[str, str]:
 
 def main() -> None:
     env = load_env()
-    base_url = env.get("FESS_BASE_URL", "http://piserver:8080").rstrip("/")
+    base_url = env.get("FESS_BASE_URL", "http://localhost:8080").rstrip("/")
     session = requests.Session()
     session.trust_env = False
     response = session.get(f"{base_url}/api/v1/health", timeout=10)

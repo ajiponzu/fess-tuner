@@ -14,6 +14,14 @@ description: >
 
 検索の試行錯誤そのものを後で再利用できるように、有効だった検索語と失敗した検索語も記録する。
 
+## 実行条件
+
+- Fess サーバーが起動していること。
+- `.env` の `FESS_BASE_URL` が設定されていること。
+- `FESS_BASE_URL` には接続先 Fess の URL を記載する。
+- `FESS_BASE_URL` が未設定の場合は、ローカル実行向け fallback として `http://localhost:8080` を使う。
+- 必要に応じて `fess-check` でヘルスチェック済みであること。
+
 ## 入力
 
 - 必須:
@@ -26,7 +34,7 @@ description: >
 ## 実行手順
 
 1. この Skill の `SKILL.md` を読む。
-2. 必要なら `.agents/skills/fess-search/Skill.md` と `search_documents.py` を確認する。
+2. 必要なら `.agents/skills/fess-search/SKILL.md` と `search_documents.py` を確認する。
 3. 質問を以下の観点で分解する。
    - 固有名詞
    - 日本語技術語
@@ -43,6 +51,25 @@ description: >
    - 未確認点
    - 検索品質上の気づき
 8. 調査ログを残す場合は `fess-knowledge` Skill の形式で `knowledge/investigations/` に保存する。
+
+## 出力
+
+以下を報告する。
+
+- 結論
+- 根拠文書と根拠の要約
+- 推測と未確認点
+- 有効だった検索語
+- 失敗した検索語
+- 次回試す検索語
+- Fess チューニング候補
+
+## 検証観点
+
+- 直接クエリと展開クエリの両方を試していること。
+- 根拠文書を明示していること。
+- 検索結果から言えることと推測を分けていること。
+- 有効クエリと失敗クエリを残していること。
 
 ## クエリ展開の例
 
@@ -71,7 +98,7 @@ description: >
 <関連クラス名> <関連概念>
 ```
 
-## 出力形式
+## 出力例
 
 ```markdown
 ## 結論

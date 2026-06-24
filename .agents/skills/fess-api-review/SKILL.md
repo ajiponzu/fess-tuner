@@ -10,13 +10,28 @@ description: Fess 15.6 の公式 API ドキュメントを参照し、AGENTS.md 
 この Skill は、プロジェクト内の Fess API 利用ルールを Fess 15.6 の公式ドキュメントに合わせて見直すために使う。
 標準ではドキュメントと Skill 定義の修正だけを行い、ユーザーが明示しない限り実際の Fess サーバーには API リクエストを送らない。
 
-## 作業手順
+## 実行条件
+
+- Fess API 利用方法、Skill 定義、AGENTS.md の API 記述を点検・修正する目的であること。
+- 公式ドキュメントまたは Fess 実装を確認できること。
+- 実サーバーへの API リクエストが必要な場合は、目的と影響範囲が明確であること。
+
+## 入力
+
+- 必須入力:
+  - 点検対象または修正対象（例: `AGENTS.md`, Fess 関連 Skill）
+- 任意入力:
+  - 確認したい API 名
+  - Fess の対象バージョン
+  - 実装確認の要否
+
+## 実行手順
 
 1. まずローカルの記述を読む。
    - `AGENTS.md`
    - `.agents/skills/` 配下の Skill 定義
    - `rg -n "Fess|fess|/api/|FESS_|fileconfig|scheduler|labeltype|joblog|failureurl" .agents/skills AGENTS.md` などで見つかる Fess API 関連記述
-   - 新しい Fess 関連 Skill が追加されている場合は、その `SKILL.md` / `Skill.md` も対象に含める
+   - 新しい Fess 関連 Skill が追加されている場合は、その `SKILL.md` も対象に含める
 
 2. 正誤判断の前に、Fess 15.6 の公式ドキュメントを確認する。
    - API index: `https://fess.codelibs.org/ja/15.6/api/index.html`
@@ -44,7 +59,7 @@ description: Fess 15.6 の公式 API ドキュメントを参照し、AGENTS.md 
 
 5. 必要なファイルだけを編集する。
    - 通常は `AGENTS.md`
-   - Fess 関連の `.agents/skills/*/Skill.md` または `SKILL.md`
+   - Fess 関連の `.agents/skills/*/SKILL.md`
    - ユーザーが求めない限り、移行元資料、セッション記録、無関係な Skill は変更しない。
 
 6. 修正後に確認する。
@@ -57,6 +72,23 @@ description: Fess 15.6 の公式 API ドキュメントを参照し、AGENTS.md 
      - `job_log_id`
      - `.Codex/skills`
    - 最後に diff を確認して、修正範囲が依頼内容に収まっていることを確認する。
+
+## 出力
+
+以下を報告する。
+
+- 確認したローカルファイル
+- 参照した公式ドキュメントまたは実装
+- 修正した API 記述
+- 公式ドキュメントと実装判断が分かれる場合の差分
+- 残った未確認点
+
+## 検証観点
+
+- エンドポイント、HTTP メソッド、認証ヘッダー、権限、成功判定が Fess 15.6 の根拠と一致していること。
+- 破壊的操作にユーザー確認が必要であることが明記されていること。
+- 古い API パスや誤った認証形式が残っていないこと。
+- 修正範囲が Fess API 利用方法の点検に収まっていること。
 
 ## Fess 15.6 の基本方針
 
@@ -73,7 +105,7 @@ description: Fess 15.6 の公式 API ドキュメントを参照し、AGENTS.md 
 - ファイルクロール設定にラベルを付ける場合は `labelTypeIds` に LabelType の ID を指定する。
 - 公開検索に出す権限は、ローカル環境で別事実がない限り `guest` のようなロール名で扱う。
 
-## 安全ルール
+## 注意
 
 - API 記述の見直し中に、破壊的 API を実行しない。
 - 削除、設定更新、ジョブ停止、バックアップ import、ドキュメント削除は、必ずユーザー確認を得てから実行する。

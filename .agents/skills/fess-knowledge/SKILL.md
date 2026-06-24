@@ -12,6 +12,12 @@ description: >
 この Skill は、Fess を使った調査結果を Markdown として保存する。
 目的は、回答内容だけでなく検索の試行錯誤を残し、人間と AI の双方が次回以降の調査で再利用できるようにすること。
 
+## 実行条件
+
+- `knowledge/` が存在すること。
+- `knowledge/templates/investigation.md` が存在すること。
+- 保存する内容に `.env` やアクセストークンなどの秘密情報が含まれていないこと。
+
 ## 保存先
 
 ```text
@@ -47,6 +53,20 @@ knowledge/
 4. ファイル名は `YYYY-MM-DD-topic.md` とし、topic は英数字とハイフン中心の短い名前にする。
 5. `knowledge/glossary.md` がなければ `knowledge/templates/glossary.md` を参考に作る。
 6. 必要に応じて `knowledge/glossary.md` に用語対応を追加する。
+
+## 出力
+
+以下のいずれか、または両方を作成・更新する。
+
+- `knowledge/investigations/YYYY-MM-DD-topic.md`
+- `knowledge/glossary.md`
+
+## 検証観点
+
+- 調査ログに Question / Answer / Evidence / Useful Queries / Failed Queries が含まれていること。
+- 事実、推測、未確認点が分かれていること。
+- 検索結果全文ではなく、文書名と要点だけが保存されていること。
+- 接続先 Fess に依存する実データが git 管理対象になっていないこと。
 
 ## 調査ログ形式
 

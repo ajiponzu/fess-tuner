@@ -29,7 +29,7 @@ def load_env() -> dict[str, str]:
 
 
 ENV = load_env()
-BASE_URL = ENV.get("FESS_BASE_URL", "http://piserver:8080").rstrip("/")
+BASE_URL = ENV.get("FESS_BASE_URL", "http://localhost:8080").rstrip("/")
 TOKEN = ENV.get("FESS_ACCESS_TOKEN", "")
 
 if not TOKEN:

@@ -31,7 +31,7 @@ def main() -> None:
     args = parser.parse_args()
 
     env = load_env()
-    base_url = env.get("FESS_BASE_URL", "http://piserver:8080").rstrip("/")
+    base_url = env.get("FESS_BASE_URL", "http://localhost:8080").rstrip("/")
     params: dict[str, str | int] = {"q": args.query, "start": 0, "num": args.num}
     if args.label:
         params["fields.label"] = args.label

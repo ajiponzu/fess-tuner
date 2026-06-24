@@ -50,7 +50,7 @@ def find_crawler_scheduler_id(settings: list[dict[str, Any]]) -> str:
 
 def main() -> None:
     env = load_env()
-    base_url = env.get("FESS_BASE_URL", "http://piserver:8080").rstrip("/")
+    base_url = env.get("FESS_BASE_URL", "http://localhost:8080").rstrip("/")
     token = env.get("FESS_ACCESS_TOKEN", "")
     if not token:
         raise SystemExit("FESS_ACCESS_TOKEN is not set.")

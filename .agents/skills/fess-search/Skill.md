@@ -1,83 +1,74 @@
 ---
 name: fess-search
 description: >
-  このSkillは、Fessサーバーに対してドキュメント検索を実行し、
-  検索結果を読みやすい形式で報告するためのスキルです。
+  Fess サーバーに対してドキュメント検索を実行し、検索結果を読みやすい形式で報告する Skill。
 ---
 
-# Overview
+# Fess Search
 
-このSkillは、ユーザーが指定した検索クエリをFessサーバー（`FESS_BASE_URL`）に送信し、
-マッチしたドキュメントの一覧を表示することを目的としています。
+## 概要
 
-- インデックスされたドキュメントの内容確認や情報検索に使用します。
-- 検索件数の指定（`--num`）によって取得件数を調整できます。
-- ラベルで絞り込む場合は `fields.label=<label_value>` を使用します。
-- ラベル分布を確認する場合は `facet.field=label` を使用します。
-- エンドポイント: `GET /api/v1/documents`（認証不要・公開API）
-- `/api/v1/search` は存在しないため使用しないこと
+この Skill は、ユーザーが指定した検索クエリを Fess サーバー（`FESS_BASE_URL`）に送信し、マッチしたドキュメントを確認する。
 
-# Inputs
+- インデックスされたドキュメントの内容確認や情報検索に使う。
+- 検索件数は `--num` で調整する。
+- ラベルで絞り込む場合は `fields.label=<label_value>` を使う。
+- ラベル分布を確認する場合は `facet.field=label` を使う。
+- エンドポイント: `GET /api/v1/documents`（認証不要・公開 API）
+- `/api/v1/search` は存在しないため使用しない。
 
-このSkillは、以下の情報を入力として想定します。
+## 実行条件
 
-- 必須入力
-  - 検索クエリ（例: `python`、`ドキュメント名` など）
+- Fess サーバーが起動していること。
+- `.env` の `FESS_BASE_URL` が設定されていること。
+- `FESS_BASE_URL` には接続先 Fess の URL を記載する。
+- `FESS_BASE_URL` が未設定の場合は、ローカル実行向け fallback として `http://localhost:8080` を使う。
 
-- 任意入力
-  - `--num N`: 取得する検索結果の件数（省略時: 5件）
+## 入力
 
-使用例: `/fess-search python --num 5`
+- 必須入力:
+  - 検索クエリ（例: `python`, `gpu_context`, `pandolabo`）
+- 任意入力:
+  - `--num N`: 取得する検索結果の件数（省略時: 5）
+  - `--label LABEL`: `fields.label` によるラベル絞り込み
 
-# Outputs
+## 実行手順
 
-このSkillは、以下の形式で出力を行います。
+1. この Skill の `SKILL.md` を読む。
+2. ユーザーが指定したクエリと任意オプションを確認する。
+3. 以下のコマンドを実行する。
 
-- 出力内容
-  - 総ヒット件数（`record_count`）
-  - 各検索結果のタイトル（`title`）、URL（`url_link`）、スニペット（`digest`）
-
-- 出力フォーマット
-
-  ```markdown
-  # 検索結果: "<クエリ>"
-
-  ヒット件数: N 件
-
-  ## 1. [タイトル](URL)
-  スニペット: ...
-
-  ## 2. [タイトル](URL)
-  スニペット: ...
-  ```
-
-# Steps
-
-このSkillを実行する際は、次のステップに従ってください。
-
-1. ユーザーが指定したクエリと任意の `--num` オプションを確認する。
-2. 以下のコマンドを実行する（`$ARGUMENTS` をユーザー提供の引数に置き換える）。
-
-   ```
-   python .agents/skills/fess-search/search_documents.py $ARGUMENTS
+   ```powershell
+   python .agents/skills/fess-search/search_documents.py <query> --num 5
    ```
 
-3. レスポンスの `record_count` から総ヒット件数を抽出して表示する。
-4. `data` 配列の各要素から `title`・`url_link`・`digest` を一覧形式で表示する。
-5. `record_count` が 0 またはリクエストが失敗した場合、エラーの詳細を報告し、Dockerコンテナの起動確認を促す。
+4. ラベルで絞り込む場合は以下のように実行する。
 
-# Guidelines
+   ```powershell
+   python .agents/skills/fess-search/search_documents.py <query> --num 5 --label <label>
+   ```
 
-このSkillを用いて出力を生成する際は、次のガイドラインを守ってください。
+5. レスポンスの `record_count` と `data` 配列を確認する。
+6. タイトル、URL、スニペットを一覧で報告する。
 
-- 文体・トーン
-  - 検索結果は整然としたリスト形式で表示してください。
-  - 結果が0件の場合は「該当するドキュメントが見つかりませんでした」と明示してください。
+## 出力
 
-- 内容の粒度
-  - タイトル・URL・スニペットは省略せず表示してください。
-  - スニペットが取得できない場合は「スニペットなし」と記載してください。
+以下を報告する。
 
-- 禁止事項 / 注意事項
-  - 検索結果に存在しない情報を補完・推測して追記しないでください。
-  - HTMLエンティティ（`&#034;` 等）はそのまま表示せず、デコードして表示してください。
+- 検索クエリ
+- 総ヒット件数（`record_count`）
+- 各検索結果のタイトル（`title`）
+- URL（`url_link`）
+- スニペット（`digest`）
+
+## 検証観点
+
+- HTTP ステータスコードが `200` であること。
+- `record_count` が取得できること。
+- `data` 配列の `title`, `url_link`, `digest` を確認できること。
+
+## 注意
+
+- 検索結果に存在しない情報を補完・推測して追記しない。
+- HTML エンティティ（`&#034;` など）は必要に応じて読みやすく解釈する。
+- 結果が 0 件の場合は、該当ドキュメントが見つからなかったことを明示し、必要なら別クエリを提案する。
