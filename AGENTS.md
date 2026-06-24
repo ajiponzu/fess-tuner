@@ -124,6 +124,8 @@ Fess 管理画面で `System > Access Token` を開き、管理 API に必要な
 | ------------------ | -------------------------------------- |
 | `fess-check`       | サーバー死活確認（前提チェック）       |
 | `fess-search`      | 検索クエリを投げて結果を確認           |
+| `fess-investigate` | 質問から複数クエリを展開して調査       |
+| `fess-knowledge`   | 調査結果・検索履歴をナレッジ化         |
 | `fess-crawl`       | クロール（インデックス更新）をトリガー |
 | `session-override` | 前回セッションの引き継ぎ               |
 | `session-handover` | 今回セッションの記録                   |
@@ -202,9 +204,12 @@ fess-tuner/
 │   └── skills/               # Codex で使う Skill 定義
 │       ├── fess-check/
 │       ├── fess-search/
+│       ├── fess-investigate/
+│       ├── fess-knowledge/
 │       ├── fess-crawl/
 │       ├── session-handover/
 │       └── session-override/
 ├── .claude/                  # Claude からの移行元資料
+├── knowledge/                # Fess 調査ログ・用語集
 └── sessions/                 # セッション記録（git 管理外）
 ```
